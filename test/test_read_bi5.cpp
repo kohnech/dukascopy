@@ -39,6 +39,31 @@ void print_help_message() {
             << "\t Example: ./test_read_bi5 GBPJPY 2012/11/03\n";
 }
 
+struct Date {
+    int year{0}, month{0}, day{0};
+};
+
+Date parse_date(std::string datestr) {
+    Date date;
+    size_t pos = 0;
+    std::string delimiter = "/";
+    pos = datestr.find(delimiter);
+    std::string year_str = datestr.substr(0, pos);
+    datestr.erase(0, pos + delimiter.length());
+
+    pos = datestr.find(delimiter);
+    std::string month_str = datestr.substr(0, pos);
+    datestr.erase(0, pos + delimiter.length());
+
+    std::string day_str = datestr;
+    
+    date.year = std::stoi(year_str);
+    date.month = std::stoi(month_str);
+    date.day = std::stoi(day_str);
+
+    return date;
+}
+
 int main(int argc, char* argv[]) {
     // Check input
     if (argc != 3) {
@@ -57,6 +82,7 @@ int main(int argc, char* argv[]) {
     std::string test_data_date = argv[2];
     std::string test_data_file = "01h_ticks.bi5";
     std::string filename = test_data_prefix + test_data_asset + "/" + test_data_date + "/" + test_data_file;
+    Date date = parse_date(test_data_date);
 
     fs::path p(filename);
     if (fs::exists(p) && fs::is_regular(p)) {
@@ -73,7 +99,7 @@ int main(int argc, char* argv[]) {
     fin.read(reinterpret_cast<char*>(buffer), buffer_size);
     fin.close();
 
-    pt::ptime epoch(gr::date(2012, 12, 3), pt::hours(1));
+    pt::ptime epoch(gr::date(date.year, date.month, date.day), pt::hours(1));
     size_t raw_size = 0;
     n47::tick_data *data = n47::read_bi5(
             buffer, buffer_size, epoch, PV_YEN_PAIR, &raw_size);
