@@ -92,7 +92,12 @@ int main(int argc, char* argv[]) {
     } else {
         std::cerr << "Error: couldn't access the data file. |"
                   << filename << "|" <<  '\n';
-        return 2;
+        return EXIT_FAILURE;
+    }
+
+    if (fs::is_empty(p)) {
+        std::cerr << "File " << filename << " is empty!" << '\n';
+        return EXIT_FAILURE;
     }
 
     std::ifstream fin;
