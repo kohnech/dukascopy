@@ -40,6 +40,11 @@ namespace gr = boost::gregorian;
 
 
 int main(void) {
+    const std::string out_file="output.csv";
+    std::ofstream fout;
+    fout.open(out_file);
+
+    
     unsigned char *buffer;
     size_t buffer_size;
     const char *test_data_prefix = STRINGIZE_VALUE_OF(TEST_DATA_PREFIX);
@@ -57,7 +62,7 @@ int main(void) {
         buffer_size = fs::file_size(p);
         buffer = new unsigned char[ buffer_size ];
     } else {
-        std::cout << "Error: couldn't access the data file. |"
+        std::cerr << "Error: couldn't access the data file. |"
                   << filename << "|" <<  std::endl;
         return 2;
     }
@@ -73,21 +78,25 @@ int main(void) {
     n47::tick_data_iterator iter;
 
     if (data == 0) {
-        std::cout << "Failure: Failed to load the data!" << std::endl;
+        std::cerr << "Failure: Failed to load the data!" << std::endl;
         return 0;
     }
 
     if (data->size() != (raw_size / n47::ROW_SIZE)) {
-        std::cout << "Failure: Loaded " << data->size()
+        std::cerr << "Failure: Loaded " << data->size()
                   << " ticks but file size indicates we should have loaded "
                   << (raw_size / n47::ROW_SIZE) << std::endl;
         return 0;
     }
 
     std::cout << "time, bid, bid_vol, ask, ask_vol" << std::endl;
+    fout << "time, bid, bid_vol, ask, ask_vol" << std::endl;
     counter = 0;
     for (iter = data->begin(); iter != data->end(); iter++) {
         std::cout << ((*iter)->epoch + (*iter)->td) << ", "
+                  << (*iter)->bid << ", " << (*iter)->bidv << ", "
+                  << (*iter)->ask << ", " << (*iter)->askv << std::endl;
+        fout << ((*iter)->epoch + (*iter)->td) << ", "
                   << (*iter)->bid << ", " << (*iter)->bidv << ", "
                   << (*iter)->ask << ", " << (*iter)->askv << std::endl;
         counter++;
@@ -98,6 +107,8 @@ int main(void) {
               << raw_size << " / " << n47::ROW_SIZE << " = "
               << (raw_size / n47::ROW_SIZE) << std::endl;
 
+    std::cout << "Data saved to file " << out_file << '\n';
+    fout.close();
     delete data;
     delete[] buffer;
     delete filename;
