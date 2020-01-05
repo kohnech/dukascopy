@@ -34,15 +34,15 @@ namespace fs = boost::filesystem;
 namespace pt = boost::posix_time;
 namespace gr = boost::gregorian;
 
-int main(void) {
+int main(int argc, char* argv[]) {
     const std::string out_file="output.csv";
     std::ofstream fout;
     fout.open(out_file);
   
     unsigned char *buffer;
     size_t buffer_size;
-    std::string test_data_prefix = "..";
-    std::string test_data_suffix = "/test/data/compressed/GBPJPY/2012/11/03/01h_ticks.bi5";
+    std::string test_data_prefix = "../test/data/compressed/";
+    std::string test_data_suffix = "GBPJPY/2012/11/03/01h_ticks.bi5";
     std::string filename = test_data_prefix + test_data_suffix;
 
     fs::path p(filename);
