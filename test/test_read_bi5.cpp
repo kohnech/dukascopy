@@ -30,32 +30,20 @@ You should have received a copy of the GNU General Public License along with
 #define STRINGIZE(x) #x
 #define STRINGIZE_VALUE_OF(x) STRINGIZE(x)
 
-#ifndef TEST_DATA_PREFIX
-#define TEST_DATA_PREFIX ..
-#endif
-
 namespace fs = boost::filesystem;
 namespace pt = boost::posix_time;
 namespace gr = boost::gregorian;
-
 
 int main(void) {
     const std::string out_file="output.csv";
     std::ofstream fout;
     fout.open(out_file);
-
-    
+  
     unsigned char *buffer;
     size_t buffer_size;
-    const char *test_data_prefix = STRINGIZE_VALUE_OF(TEST_DATA_PREFIX);
-    const char *test_data_suffix =
-        "/test/data/compressed/GBPJPY/2012/11/03/01h_ticks.bi5";
-    int counter;
-    size_t raw_size = 0;
-    size_t filename_len = strlen(test_data_prefix) + strlen(test_data_suffix) + 1;
-    char *filename = new char[filename_len];
-    snprintf(
-        filename, filename_len, "%s%s", test_data_prefix, test_data_suffix);
+    std::string test_data_prefix = "..";
+    std::string test_data_suffix = "/test/data/compressed/GBPJPY/2012/11/03/01h_ticks.bi5";
+    std::string filename = test_data_prefix + test_data_suffix;
 
     fs::path p(filename);
     if (fs::exists(p) && fs::is_regular(p)) {
@@ -73,6 +61,7 @@ int main(void) {
     fin.close();
 
     pt::ptime epoch(gr::date(2012, 12, 3), pt::hours(1));
+    size_t raw_size = 0;
     n47::tick_data *data = n47::read_bi5(
             buffer, buffer_size, epoch, PV_YEN_PAIR, &raw_size);
     n47::tick_data_iterator iter;
@@ -91,7 +80,7 @@ int main(void) {
 
     std::cout << "time, bid, bid_vol, ask, ask_vol" << std::endl;
     fout << "time, bid, bid_vol, ask, ask_vol" << std::endl;
-    counter = 0;
+    int counter = 0;
     for (iter = data->begin(); iter != data->end(); iter++) {
         std::cout << ((*iter)->epoch + (*iter)->td) << ", "
                   << (*iter)->bid << ", " << (*iter)->bidv << ", "
@@ -111,5 +100,4 @@ int main(void) {
     fout.close();
     delete data;
     delete[] buffer;
-    delete filename;
 }
