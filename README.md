@@ -40,6 +40,9 @@ Example
 
 In order to run the test examples you first need to build the project
 
+    git submodule init
+    git submodule update
+    
     mkdir build/
     cd build/
     cmake ..
