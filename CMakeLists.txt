@@ -66,7 +66,6 @@ file(COPY ./include/ninety47/dukascopy.h DESTINATION ${INCDIR})
 #
 file(GLOB tests_src RELATIVE "${CMAKE_SOURCE_DIR}/test" "${CMAKE_SOURCE_DIR}/test/*.cpp")
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/test)
-file(COPY ./test/data DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/test)
 
 if (Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
