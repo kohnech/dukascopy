@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   container:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     container: heliconwave/boost
     steps:
       - uses: actions/checkout@v1
