@@ -12,6 +12,8 @@ jobs:
           echo This job does specify a container.
           lsb_release -a
           echo nproc $(nproc)
+          git submodule init
+          git submodule update
           mkdir build
           cd build/
           cmake ..
