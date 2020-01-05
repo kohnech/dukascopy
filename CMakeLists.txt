@@ -49,19 +49,6 @@ file(MAKE_DIRECTORY ${INCDIR})
 file(COPY ./include/ninety47/dukascopy.h DESTINATION ${INCDIR})
 
 #
-# dukascopy utils..
-#
-
-#file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${LIBDISTNAME}/bin)
-#add_executable(hello ./bin/main.cpp)
-#set_target_properties(hello  PROPERTIES
-#    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin"
-#    COMPILE_FLAGS "-I./include"
-#)
-#target_link_libraries(hello world)
-
-
-#
 # Tests....
 #
 file(GLOB tests_src RELATIVE "${CMAKE_SOURCE_DIR}/test" "${CMAKE_SOURCE_DIR}/test/*.cpp")
