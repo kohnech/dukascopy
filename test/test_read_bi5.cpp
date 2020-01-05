@@ -56,7 +56,7 @@ Date parse_date(std::string datestr) {
     datestr.erase(0, pos + delimiter.length());
 
     std::string day_str = datestr;
-    
+
     date.year = std::stoi(year_str);
     date.month = std::stoi(month_str);
     date.day = std::stoi(day_str);
@@ -82,6 +82,7 @@ int main(int argc, char* argv[]) {
     std::string test_data_date = argv[2];
     std::string test_data_file = "01h_ticks.bi5";
     std::string filename = test_data_prefix + test_data_asset + "/" + test_data_date + "/" + test_data_file;
+    std::cout << "Reading data from file " << filename << '\n';
     Date date = parse_date(test_data_date);
 
     fs::path p(filename);
@@ -90,7 +91,7 @@ int main(int argc, char* argv[]) {
         buffer = new unsigned char[ buffer_size ];
     } else {
         std::cerr << "Error: couldn't access the data file. |"
-                  << filename << "|" <<  std::endl;
+                  << filename << "|" <<  '\n';
         return 2;
     }
 
@@ -106,34 +107,34 @@ int main(int argc, char* argv[]) {
     n47::tick_data_iterator iter;
 
     if (data == 0) {
-        std::cerr << "Failure: Failed to load the data!" << std::endl;
+        std::cerr << "Failure: Failed to load the data!" << '\n';
         return 0;
     }
 
     if (data->size() != (raw_size / n47::ROW_SIZE)) {
         std::cerr << "Failure: Loaded " << data->size()
                   << " ticks but file size indicates we should have loaded "
-                  << (raw_size / n47::ROW_SIZE) << std::endl;
+                  << (raw_size / n47::ROW_SIZE) << '\n';
         return 0;
     }
 
-    std::cout << "time, bid, bid_vol, ask, ask_vol" << std::endl;
-    fout << "time, bid, bid_vol, ask, ask_vol" << std::endl;
+    std::cout << "time, bid, bid_vol, ask, ask_vol" << '\n';
+    fout << "time, bid, bid_vol, ask, ask_vol" << '\n';
     int counter = 0;
     for (iter = data->begin(); iter != data->end(); iter++) {
         std::cout << ((*iter)->epoch + (*iter)->td) << ", "
                   << (*iter)->bid << ", " << (*iter)->bidv << ", "
-                  << (*iter)->ask << ", " << (*iter)->askv << std::endl;
+                  << (*iter)->ask << ", " << (*iter)->askv << '\n';
         fout << ((*iter)->epoch + (*iter)->td) << ", "
                   << (*iter)->bid << ", " << (*iter)->bidv << ", "
-                  << (*iter)->ask << ", " << (*iter)->askv << std::endl;
+                  << (*iter)->ask << ", " << (*iter)->askv << '\n';
         counter++;
     }
-    std::cout << ".end." << std::endl << std::endl
+    std::cout << ".end." << "\n\n"
               << "From " << buffer_size << " bytes we read " << counter
-              << " records." << std::endl
+              << " records." << '\n'
               << raw_size << " / " << n47::ROW_SIZE << " = "
-              << (raw_size / n47::ROW_SIZE) << std::endl;
+              << (raw_size / n47::ROW_SIZE) << '\n';
 
     std::cout << "Data saved to file " << out_file << '\n';
     fout.close();
