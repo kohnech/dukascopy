@@ -1,12 +1,14 @@
-cmake_minimum_required(VERSION 2.8.7)
+cmake_minimum_required(VERSION 3.5) # Choose this version for Boost find_package
 
-project(libdukascopy)
+project(libdukascopy
+        VERSION 0.1.0
+        DESCRIPTION "Unpack Dukascopy data"
+        LANGUAGES CXX)
+
 set(NINETY47 ninety47)
-set(LIBDUKASCOPY_MAJOR 0)
-set(LIBDUKASCOPY_MINOR 1)
-set(LIBDUKASCOPY_MICRO 0)
+
 set(LIBDISTNAME 
-    "${NINETY47}-dukascopy-${LIBDUKASCOPY_MAJOR}.${LIBDUKASCOPY_MINOR}.${LIBDUKASCOPY_MICRO}")
+    "${NINETY47}-dukascopy-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
 set(LIBDIR "${CMAKE_CURRENT_BINARY_DIR}/${LIBDISTNAME}/lib")
 set(INCDIR "${CMAKE_CURRENT_BINARY_DIR}/${LIBDISTNAME}/include/${NINETY47}")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
@@ -33,8 +35,8 @@ add_library(dukascopy_s STATIC ${lib_src})
 set_target_properties(
     dukascopy PROPERTIES
     OUTPUT_NAME "${NINETY47}_dukascopy"
-    SOVERSION ${LIBDUKASCOPY_MAJOR}
-    VERSION ${LIBDUKASCOPY_MAJOR}.${LIBDUKASCOPY_MINOR}.${LIBDUKASCOPY_MICRO}
+    SOVERSION ${PROJECT_VERSION_MAJOR}
+    VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}
 )
 set_target_properties(dukascopy_s PROPERTIES
     OUTPUT_NAME "${NINETY47}_dukascopy"
@@ -47,24 +49,10 @@ file(MAKE_DIRECTORY ${INCDIR})
 file(COPY ./include/ninety47/dukascopy.h DESTINATION ${INCDIR})
 
 #
-# dukascopy utils..
-#
-
-#file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${LIBDISTNAME}/bin)
-#add_executable(hello ./bin/main.cpp)
-#set_target_properties(hello  PROPERTIES
-#    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin"
-#    COMPILE_FLAGS "-I./include"
-#)
-#target_link_libraries(hello world)
-
-
-#
 # Tests....
 #
 file(GLOB tests_src RELATIVE "${CMAKE_SOURCE_DIR}/test" "${CMAKE_SOURCE_DIR}/test/*.cpp")
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/test)
-file(COPY ./test/data DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/test)
 
 if (Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
