@@ -1,0 +1,19 @@
+name: CI
+
+on: [push]
+
+jobs:
+  container:
+    runs-on: ubuntu-latest
+    container: heliconwave/boost
+    steps:
+      - uses: actions/checkout@v1
+      - run: |
+          echo This job does specify a container.
+          lsb_release -a
+          echo nproc $(nproc)
+          mkdir build
+          cd build/
+          cmake ..
+          make -j 3
+        name: Run in container
