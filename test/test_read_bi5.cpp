@@ -34,7 +34,18 @@ namespace fs = boost::filesystem;
 namespace pt = boost::posix_time;
 namespace gr = boost::gregorian;
 
+void print_help_message() {
+    std::cout << "./test_read_bi5 [ASSET] [DATE: YYYY/MM/DD]\n"
+            << "\t Example: ./test_read_bi5 GBPJPY 2012/11/03\n";
+}
+
 int main(int argc, char* argv[]) {
+    // Check input
+    if (argc != 3) {
+        print_help_message();
+        return EXIT_FAILURE;
+    }
+      
     const std::string out_file="output.csv";
     std::ofstream fout;
     fout.open(out_file);
@@ -42,10 +53,10 @@ int main(int argc, char* argv[]) {
     unsigned char *buffer;
     size_t buffer_size;
     std::string test_data_prefix = "../test/data/compressed/";
-    std::string test_data_asset = "GBPJPY/";
-    std::string test_data_date = "2012/11/03/";
+    std::string test_data_asset = argv[1];
+    std::string test_data_date = argv[2];
     std::string test_data_file = "01h_ticks.bi5";
-    std::string filename = test_data_prefix + test_data_asset + test_data_date + test_data_file;
+    std::string filename = test_data_prefix + test_data_asset + "/" + test_data_date + "/" + test_data_file;
 
     fs::path p(filename);
     if (fs::exists(p) && fs::is_regular(p)) {
@@ -102,4 +113,5 @@ int main(int argc, char* argv[]) {
     fout.close();
     delete data;
     delete[] buffer;
+    return EXIT_SUCCESS;
 }
