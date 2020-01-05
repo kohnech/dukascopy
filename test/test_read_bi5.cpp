@@ -42,8 +42,10 @@ int main(int argc, char* argv[]) {
     unsigned char *buffer;
     size_t buffer_size;
     std::string test_data_prefix = "../test/data/compressed/";
-    std::string test_data_suffix = "GBPJPY/2012/11/03/01h_ticks.bi5";
-    std::string filename = test_data_prefix + test_data_suffix;
+    std::string test_data_asset = "GBPJPY/";
+    std::string test_data_date = "2012/11/03/";
+    std::string test_data_file = "01h_ticks.bi5";
+    std::string filename = test_data_prefix + test_data_asset + test_data_date + test_data_file;
 
     fs::path p(filename);
     if (fs::exists(p) && fs::is_regular(p)) {
