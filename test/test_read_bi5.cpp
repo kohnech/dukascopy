@@ -64,28 +64,10 @@ Date parse_date(std::string datestr) {
     return date;
 }
 
-int main(int argc, char* argv[]) {
-    // Check input
-    if (argc != 3) {
-        print_help_message();
-        return EXIT_FAILURE;
-    }
-      
-    const std::string out_file="output.csv";
-    std::ofstream fout;
-    fout.open(out_file);
-  
+int read_file(std::string filename, std::string out_file, Date date) {
     unsigned char *buffer;
-    size_t buffer_size;
-    std::string test_data_prefix = "../test/data/compressed/";
-    std::string test_data_asset = argv[1];
-    std::string test_data_date = argv[2];
-    std::string test_data_file = "01h_ticks.bi5";
-    std::string filename = test_data_prefix + test_data_asset + "/" + test_data_date + "/" + test_data_file;
-    std::cout << "Reading data from file " << filename << '\n';
-    Date date = parse_date(test_data_date);
-
     fs::path p(filename);
+    size_t buffer_size;
     if (fs::exists(p) && fs::is_regular(p)) {
         buffer_size = fs::file_size(p);
         buffer = new unsigned char[ buffer_size ];
@@ -99,6 +81,9 @@ int main(int argc, char* argv[]) {
         std::cerr << "File " << filename << " is empty!" << '\n';
         return EXIT_FAILURE;
     }
+
+    std::ofstream fout;
+    fout.open(out_file);
 
     std::ifstream fin;
     fin.open(filename, std::ifstream::binary);
@@ -135,15 +120,68 @@ int main(int argc, char* argv[]) {
                   << (*iter)->ask << ", " << (*iter)->askv << '\n';
         counter++;
     }
-    std::cout << ".end." << "\n\n"
-              << "From " << buffer_size << " bytes we read " << counter
-              << " records." << '\n'
-              << raw_size << " / " << n47::ROW_SIZE << " = "
-              << (raw_size / n47::ROW_SIZE) << '\n';
 
-    std::cout << "Data saved to file " << out_file << '\n';
-    fout.close();
+    std::cout << ".end." << "\n\n"
+          << "From " << buffer_size << " bytes we read " << counter
+          << " records." << '\n'
+          << raw_size << " / " << n47::ROW_SIZE << " = "
+          << (raw_size / n47::ROW_SIZE) << '\n';
+
     delete data;
     delete[] buffer;
+    fout.close();
+
     return EXIT_SUCCESS;
+}
+
+int main(int argc, char* argv[]) {
+    // Check input
+    if (argc != 3) {
+        print_help_message();
+        return EXIT_FAILURE;
+    }
+      
+    const std::string out_file="output.csv";
+
+    std::string test_data_prefix = "../test/data/compressed/";
+    std::string test_data_asset = argv[1];
+    std::string test_data_date = argv[2];
+    std::string test_data_file = "01h_ticks.bi5";
+
+    std::array<std::string, 24> all_files = {
+        "00h_ticks.bi5",
+        "01h_ticks.bi5",
+        "02h_ticks.bi5",
+        "03h_ticks.bi5",
+        "04h_ticks.bi5",
+        "05h_ticks.bi5",
+        "06h_ticks.bi5",
+        "06h_ticks.bi5",
+        "07h_ticks.bi5",
+        "08h_ticks.bi5",
+        "10h_ticks.bi5",
+        "11h_ticks.bi5",
+        "12h_ticks.bi5",
+        "13h_ticks.bi5",
+        "14h_ticks.bi5",
+        "15h_ticks.bi5",
+        "16h_ticks.bi5",
+        "17h_ticks.bi5",
+        "18h_ticks.bi5",
+        "19h_ticks.bi5",
+        "20h_ticks.bi5",
+        "21h_ticks.bi5",
+        "22h_ticks.bi5",
+        "23h_ticks.bi5"
+    };
+
+    std::string filename = test_data_prefix + test_data_asset + "/" + test_data_date + "/" + test_data_file;
+    std::cout << "Reading data from file " << filename << '\n';
+    Date date = parse_date(test_data_date);
+
+    int ret_code = read_file(filename, out_file, date);
+
+    std::cout << "Data saved to file " << out_file << '\n';
+    
+    return ret_code;
 }
