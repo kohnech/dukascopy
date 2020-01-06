@@ -147,14 +147,13 @@ int main(int argc, char* argv[]) {
     std::string test_data_date = argv[2];
     std::string test_data_file = "01h_ticks.bi5";
 
-    std::array<std::string, 25> all_files = {
+    std::array<std::string, 24> all_files = {
         "00h_ticks.bi5",
         "01h_ticks.bi5",
         "02h_ticks.bi5",
         "03h_ticks.bi5",
         "04h_ticks.bi5",
         "05h_ticks.bi5",
-        "06h_ticks.bi5",
         "06h_ticks.bi5",
         "07h_ticks.bi5",
         "08h_ticks.bi5",
@@ -180,7 +179,34 @@ int main(int argc, char* argv[]) {
         std::string filename = test_data_prefix + test_data_asset + "/" + test_data_date + "/" + file;
         std::cout << "Reading data from file " << filename << '\n';
         Date date = parse_date(test_data_date);
-        date.hour = hour;
+        // Bug in dukascopy, the 10h_ticks.bi5 is actually a continuation of 09h_ticks.bi5
+        if (hour == 10) {
+            date.hour = 9;    
+        }
+        else if (hour == 11){
+            date.hour = 10;
+        }
+        else if (hour == 12){
+            date.hour = 11;
+        }
+        else if (hour == 13){
+            date.hour = 12;
+        }
+        else if (hour == 14){
+            date.hour = 13;
+        }
+        else if (hour == 15){
+            date.hour = 14;
+        }
+        else if (hour == 16){
+            date.hour = 15;
+        }
+        else if (hour == 17){
+            date.hour = 16;
+        }
+        else {
+            date.hour = hour;
+        }
         const std::string out_file = "output" + file + ".csv";
         read_file(filename, out_file, date);
         std::cout << "Data saved to file " << out_file << '\n';
