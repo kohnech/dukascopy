@@ -40,7 +40,7 @@ void print_help_message() {
 }
 
 struct Date {
-    int year{0}, month{0}, day{0};
+    int year{0}, month{0}, day{0}, hour{0};
 };
 
 Date parse_date(std::string datestr) {
@@ -90,7 +90,7 @@ int read_file(std::string filename, std::string out_file, Date date) {
     fin.read(reinterpret_cast<char*>(buffer), buffer_size);
     fin.close();
 
-    pt::ptime epoch(gr::date(date.year, date.month, date.day), pt::hours(1));
+    pt::ptime epoch(gr::date(date.year, date.month, date.day), pt::hours(date.hour));
     size_t raw_size = 0;
     n47::tick_data *data = n47::read_bi5(
             buffer, buffer_size, epoch, PV_YEN_PAIR, &raw_size);
@@ -147,14 +147,13 @@ int main(int argc, char* argv[]) {
     std::string test_data_date = argv[2];
     std::string test_data_file = "01h_ticks.bi5";
 
-    std::array<std::string, 25> all_files = {
+    std::array<std::string, 24> all_files = {
         "00h_ticks.bi5",
         "01h_ticks.bi5",
         "02h_ticks.bi5",
         "03h_ticks.bi5",
         "04h_ticks.bi5",
         "05h_ticks.bi5",
-        "06h_ticks.bi5",
         "06h_ticks.bi5",
         "07h_ticks.bi5",
         "08h_ticks.bi5",
@@ -175,13 +174,16 @@ int main(int argc, char* argv[]) {
         "23h_ticks.bi5"
     };
 
+    int hour = 1;
     for (auto file : all_files) {
         std::string filename = test_data_prefix + test_data_asset + "/" + test_data_date + "/" + file;
         std::cout << "Reading data from file " << filename << '\n';
-        Date date = parse_date(test_data_date);
+        Date date = parse_date(test_data_date);      
+        date.hour = hour;        
         const std::string out_file = "output" + file + ".csv";
         read_file(filename, out_file, date);
         std::cout << "Data saved to file " << out_file << '\n';
+        ++hour;
     }
 
     return EXIT_SUCCESS;
