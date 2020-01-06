@@ -178,37 +178,8 @@ int main(int argc, char* argv[]) {
     for (auto file : all_files) {
         std::string filename = test_data_prefix + test_data_asset + "/" + test_data_date + "/" + file;
         std::cout << "Reading data from file " << filename << '\n';
-        Date date = parse_date(test_data_date);
-        // Bug in dukascopy, the 10h_ticks.bi5 is actually a continuation of 09h_ticks.bi5
-        
-        
-        if (hour == 11) {
-            date.hour = 10;
-        }
-        else if (hour == 12){
-            date.hour = 11;
-        }
-        else if (hour == 13){
-            date.hour = 12;
-        }
-        else if (hour == 14){
-            date.hour = 13;
-        }
-        else if (hour == 15){
-            date.hour = 14;
-        }
-        else if (hour == 16){
-            date.hour = 15;
-        }
-        else if (hour == 17){
-            date.hour = 16;
-        }
-        else if (hour == 18){
-            date.hour = 17;
-        }
-        else {
-            date.hour = hour;
-        }
+        Date date = parse_date(test_data_date);      
+        date.hour = hour;        
         const std::string out_file = "output" + file + ".csv";
         read_file(filename, out_file, date);
         std::cout << "Data saved to file " << out_file << '\n';
