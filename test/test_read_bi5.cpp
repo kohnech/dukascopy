@@ -174,16 +174,15 @@ int main(int argc, char* argv[]) {
         "23h_ticks.bi5"
     };
 
-    int hour = 0;
+    int hour = 1;
     for (auto file : all_files) {
         std::string filename = test_data_prefix + test_data_asset + "/" + test_data_date + "/" + file;
         std::cout << "Reading data from file " << filename << '\n';
         Date date = parse_date(test_data_date);
         // Bug in dukascopy, the 10h_ticks.bi5 is actually a continuation of 09h_ticks.bi5
-        if (hour == 10) {
-            date.hour = 9;    
-        }
-        else if (hour == 11){
+        
+        
+        if (hour == 11) {
             date.hour = 10;
         }
         else if (hour == 12){
@@ -203,6 +202,9 @@ int main(int argc, char* argv[]) {
         }
         else if (hour == 17){
             date.hour = 16;
+        }
+        else if (hour == 18){
+            date.hour = 17;
         }
         else {
             date.hour = hour;
