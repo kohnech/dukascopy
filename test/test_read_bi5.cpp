@@ -147,7 +147,7 @@ int main(int argc, char* argv[]) {
     std::string test_data_date = argv[2];
     std::string test_data_file = "01h_ticks.bi5";
 
-    std::array<std::string, 24> all_files = {
+    std::array<std::string, 25> all_files = {
         "00h_ticks.bi5",
         "01h_ticks.bi5",
         "02h_ticks.bi5",
