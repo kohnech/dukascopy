@@ -141,7 +141,6 @@ int main(int argc, char* argv[]) {
         return EXIT_FAILURE;
     }
       
-    const std::string out_file="output.csv";
 
     std::string test_data_prefix = "../test/data/compressed/";
     std::string test_data_asset = argv[1];
@@ -175,13 +174,14 @@ int main(int argc, char* argv[]) {
         "23h_ticks.bi5"
     };
 
-    std::string filename = test_data_prefix + test_data_asset + "/" + test_data_date + "/" + test_data_file;
-    std::cout << "Reading data from file " << filename << '\n';
-    Date date = parse_date(test_data_date);
+    for (auto file : all_files) {
+        std::string filename = test_data_prefix + test_data_asset + "/" + test_data_date + "/" + file;
+        std::cout << "Reading data from file " << filename << '\n';
+        Date date = parse_date(test_data_date);
+        const std::string out_file = "output" + file + ".csv";
+        read_file(filename, out_file, date);
+        std::cout << "Data saved to file " << out_file << '\n';
+    }
 
-    int ret_code = read_file(filename, out_file, date);
-
-    std::cout << "Data saved to file " << out_file << '\n';
-    
-    return ret_code;
+    return EXIT_SUCCESS;
 }
