@@ -108,13 +108,13 @@ int read_file(std::string filename, std::string out_file, Date date) {
         return 0;
     }
 
-    std::cout << "time, bid, bid_vol, ask, ask_vol" << '\n';
+    // std::cout << "time, bid, bid_vol, ask, ask_vol" << '\n';
     fout << "time, bid, bid_vol, ask, ask_vol" << '\n';
     int counter = 0;
     for (iter = data->begin(); iter != data->end(); iter++) {
-        std::cout << ((*iter)->epoch + (*iter)->td) << ", "
-                  << (*iter)->bid << ", " << (*iter)->bidv << ", "
-                  << (*iter)->ask << ", " << (*iter)->askv << '\n';
+        // std::cout << ((*iter)->epoch + (*iter)->td) << ", "
+        //           << (*iter)->bid << ", " << (*iter)->bidv << ", "
+        //           << (*iter)->ask << ", " << (*iter)->askv << '\n';
         fout << ((*iter)->epoch + (*iter)->td) << ", "
                   << (*iter)->bid << ", " << (*iter)->bidv << ", "
                   << (*iter)->ask << ", " << (*iter)->askv << '\n';
@@ -158,6 +158,7 @@ int main(int argc, char* argv[]) {
         "06h_ticks.bi5",
         "07h_ticks.bi5",
         "08h_ticks.bi5",
+        "09h_ticks.bi5",
         "10h_ticks.bi5",
         "11h_ticks.bi5",
         "12h_ticks.bi5",
